@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="dmusys.nullpoint.dk" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\mikke\\Documents\\Visual\ Studio\ 2015\\Projects\\bootstraptestless\\bootstraptestless\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\mikke\\Documents\\Visual\ Studio\ 2015\\Projects\\bootstraptestless\\bootstraptestless\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="Add write permission to App_Data Folder" description="Add write permission to App_Data folder" value="dmusys.nullpoint.dk/App_Data" tags="Hidden">
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\mikke\\Documents\\Visual\ Studio\ 2015\\Projects\\bootstraptestless\\bootstraptestless\\obj\\Release\\Package\\PackageTmp\\App_Data$" />
+  </parameter>
+  <parameter name="DMUSys-Web.config Connection String" description="" value="Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=DMUSys;Integrated Security=True" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\mikke\\Documents\\Visual\ Studio\ 2015\\Projects\\bootstraptestless\\bootstraptestless\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DMUSys']/@connectionString" />
+  </parameter>
+</parameters>

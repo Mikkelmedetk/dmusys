@@ -1,0 +1,167 @@
+﻿@model bootstraptestless.ViewModels.KodebesvarelseViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" http-equiv="Content-Type" charset="UTF-8" />
+    <title>KodeBesvarelse</title>
+    @Scripts.Render("~/bundles/jquery");
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <style>
+html,body {
+  padding:0;
+  margin:0;
+}
+
+body {
+  overflow: hidden;
+  background-color:#004A61;
+}
+
+.row {
+  margin-left:0;
+  margin-right:0;
+}
+
+.row .sp {
+  height:150px;
+  min-height:45px;
+  padding-right:0;
+  padding-left: 0;
+  background-color: #222;
+  border-bottom:4px solid transparent;
+}
+
+.row .sp.toolbar {
+  min-height:450px;
+}
+
+
+
+.inner {
+  overflow-y:auto;
+  overflow-x:hidden;
+  width:100%;
+  height:550px;
+}
+
+
+
+
+::-webkit-scrollbar {
+    width: 0.9em;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(100, 100, 100, 0.7);
+}
+
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(100, 100, 100, 0.4);
+}
+
+.ace_autocomplete {
+  width: 270px;
+  z-index: 200000;
+  background: #666;
+  color: #eee;
+  border: 0 lightgray solid;
+  position: fixed;
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  line-height: 1.4;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+        <div class="row">
+            <div class="col-lg-12" style="background-color:black;padding:20px;">
+                <div>
+                    <h4 style="float:left;">Lektion #@Model.lektion.Lektionnummer //@Model.KodeBesvarelse.Opgavenavn</h4>
+                    <span class="small" style="float:right;color:white;padding-top:20px;"><b>Syntax:</b> Java</span>
+                </div>
+                <div id="editor" class="inner"><pre>@Model.KodeBesvarelse.Indhold</pre></div>
+                <input type="hidden" name="kode" id="kode" value="" />
+                <div style="padding-top:7px;">
+                    @if (Model.Edit == true)
+                    {
+                        <a href="#" class="btn btn-sm btn-success pull-right gem">Gem</a>
+                    }
+
+                    <a href="#" onclick="window.close()" class="btn btn-sm btn-default pull-right">Luk vindue</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+
+
+
+
+
+    <!------>
+
+    <script src="~/Ace/ace.js" charset="utf-8"></script>
+
+    <script>
+        $(document).ready(function () {
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/java");
+        editor.setShowPrintMargin(false);
+        
+        $("#kode").val(editor.getSession().getValue());
+
+
+
+        editor.getSession().on('change', function () {
+            $("#kode").val(editor.getSession().getValue());
+        });
+
+
+
+
+
+        $(".gem").click(function (e) {
+            e.preventDefault();
+            var kodeindhold = $("#kode").val();
+            var LektionViewModel = {
+                lektion: {
+                    "Id": '@Model.lektion.Id',
+                },
+                KodeBesvarelse: {
+                    Id: '@Model.KodeBesvarelse.Id',
+                    Indhold: kodeindhold
+                },
+                Edit: '@Model.Edit'
+            }
+
+            $.ajax({
+                url: '@Url.Action("KodeView", "Home", null, this.Request.Url.Scheme)',
+                type: 'POST',
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(LektionViewModel),
+                success: function (data) {
+                    window.close();
+                }
+            });
+        });
+        });
+
+    </script>
+</body>
+</html>

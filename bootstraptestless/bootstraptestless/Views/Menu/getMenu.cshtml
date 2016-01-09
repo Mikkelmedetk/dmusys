@@ -1,0 +1,53 @@
+﻿@model bootstraptestless.ViewModels.MenuViewModel
+
+@{
+    Layout = null;
+
+}
+@foreach (var item in Model.alleFag)
+        {
+        if (Request.QueryString["valgtFag"] == null)
+        {
+            if (ViewContext.RouteData.Values["valgtFag"] != null && ViewContext.RouteData.Values["valgtFag"].Equals(item.friendlyFagNavn))
+            {
+            <li>
+                <a class="activeItem" href="~/@item.friendlyFagNavn">@item.Fagnavn</a>
+            </li>
+        }
+        else if (Model.alleFag.First() == item && ViewContext.RouteData.Values["valgtFag"] == null )
+        {
+            <li>
+                <a class="activeItem" href="~/@item.friendlyFagNavn">@item.Fagnavn</a>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="~/@item.friendlyFagNavn">@item.Fagnavn</a>
+            </li>
+        }
+    }
+
+    
+    if (Request.QueryString["valgtFag"] != null || Request.Url.Segments[1].ToString() == null)
+    {
+        if (Request.QueryString["valgtFag"] != null && Request.QueryString["valgtFag"].Equals(item.friendlyFagNavn))
+        {
+            <li>
+                <a class="activeItem" href="~/@item.friendlyFagNavn">@item.Fagnavn</a>
+            </li>
+        }
+        else if (Model.alleFag.First() == item && Request.QueryString["valgtFag"] == null)
+        {
+            <li>
+                <a class="activeItem" href="~/@item.friendlyFagNavn">@item.Fagnavn</a>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="~/@item.friendlyFagNavn">@item.Fagnavn</a>
+            </li>
+        }
+    }
+}

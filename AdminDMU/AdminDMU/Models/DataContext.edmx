@@ -1,0 +1,732 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DMUSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Fag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fagnavn" Type="nvarchar(max)" />
+          <Property Name="friendlyFagNavn" Type="nvarchar(max)" />
+          <Property Name="Fagbeskrivelse" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Kode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Indhold" Type="nvarchar(max)" />
+          <Property Name="Opgavenavn" Type="nvarchar(max)" />
+          <Property Name="LektionsId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lektion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Lektionafholdelsestid" Type="datetime" Nullable="false" />
+          <Property Name="Lektionnummer" Type="int" Nullable="false" />
+          <Property Name="Lektionsbeskrivelse" Type="nvarchar" MaxLength="75" Nullable="false" />
+          <Property Name="SemesterId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lektionsbesvarelser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Filnavn" Type="nvarchar(max)" />
+          <Property Name="Url" Type="nvarchar(max)" />
+          <Property Name="LektionsId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lektionsfiler">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Filnavn" Type="nvarchar(max)" />
+          <Property Name="Url" Type="nvarchar(max)" />
+          <Property Name="LektionsId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Semester">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Navn" Type="nvarchar(max)" />
+          <Property Name="PeriodeStart" Type="datetime" Nullable="false" />
+          <Property Name="PeriodeSlut" Type="datetime" Nullable="false" />
+          <Property Name="FagId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Kode_dbo_Lektion_LektionsId">
+          <End Role="Lektion" Type="Self.Lektion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Kode" Type="Self.Kode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lektion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Kode">
+              <PropertyRef Name="LektionsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Lektion_dbo_Semester_SemesterId">
+          <End Role="Semester" Type="Self.Semester" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Lektion" Type="Self.Lektion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lektion">
+              <PropertyRef Name="SemesterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Lektionsbesvarelser_dbo_Lektion_LektionsId">
+          <End Role="Lektion" Type="Self.Lektion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Lektionsbesvarelser" Type="Self.Lektionsbesvarelser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lektion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lektionsbesvarelser">
+              <PropertyRef Name="LektionsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Lektionsfiler_dbo_Lektion_LektionsId">
+          <End Role="Lektion" Type="Self.Lektion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Lektionsfiler" Type="Self.Lektionsfiler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lektion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lektionsfiler">
+              <PropertyRef Name="LektionsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Semester_dbo_Fag_FagId">
+          <End Role="Fag" Type="Self.Fag" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Semester" Type="Self.Semester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fag">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Semester">
+              <PropertyRef Name="FagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DMUSysModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Fag" EntityType="Self.Fag" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kode" EntityType="Self.Kode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lektion" EntityType="Self.Lektion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lektionsbesvarelser" EntityType="Self.Lektionsbesvarelser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lektionsfiler" EntityType="Self.Lektionsfiler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Semester" EntityType="Self.Semester" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Kode_dbo_Lektion_LektionsId" Association="Self.FK_dbo_Kode_dbo_Lektion_LektionsId">
+            <End Role="Lektion" EntitySet="Lektion" />
+            <End Role="Kode" EntitySet="Kode" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Lektion_dbo_Semester_SemesterId" Association="Self.FK_dbo_Lektion_dbo_Semester_SemesterId">
+            <End Role="Semester" EntitySet="Semester" />
+            <End Role="Lektion" EntitySet="Lektion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Lektionsbesvarelser_dbo_Lektion_LektionsId" Association="Self.FK_dbo_Lektionsbesvarelser_dbo_Lektion_LektionsId">
+            <End Role="Lektion" EntitySet="Lektion" />
+            <End Role="Lektionsbesvarelser" EntitySet="Lektionsbesvarelser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Lektionsfiler_dbo_Lektion_LektionsId" Association="Self.FK_dbo_Lektionsfiler_dbo_Lektion_LektionsId">
+            <End Role="Lektion" EntitySet="Lektion" />
+            <End Role="Lektionsfiler" EntitySet="Lektionsfiler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Semester_dbo_Fag_FagId" Association="Self.FK_dbo_Semester_dbo_Fag_FagId">
+            <End Role="Fag" EntitySet="Fag" />
+            <End Role="Semester" EntitySet="Semester" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DMUSysModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+        </EntityType>
+        <EntityType Name="Fag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fagnavn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="friendlyFagNavn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Fagbeskrivelse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Semesters" Relationship="Self.FK_dbo_Semester_dbo_Fag_FagId" FromRole="Fag" ToRole="Semester" />
+        </EntityType>
+        <EntityType Name="Kode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Indhold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Opgavenavn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LektionsId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Lektion" Relationship="Self.FK_dbo_Kode_dbo_Lektion_LektionsId" FromRole="Kode" ToRole="Lektion" />
+        </EntityType>
+        <EntityType Name="Lektion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Lektionafholdelsestid" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Lektionnummer" Type="Int32" Nullable="false" />
+          <Property Name="Lektionsbeskrivelse" Type="String" MaxLength="75" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SemesterId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Kodes" Relationship="Self.FK_dbo_Kode_dbo_Lektion_LektionsId" FromRole="Lektion" ToRole="Kode" />
+          <NavigationProperty Name="Semester" Relationship="Self.FK_dbo_Lektion_dbo_Semester_SemesterId" FromRole="Lektion" ToRole="Semester" />
+          <NavigationProperty Name="Lektionsbesvarelsers" Relationship="Self.FK_dbo_Lektionsbesvarelser_dbo_Lektion_LektionsId" FromRole="Lektion" ToRole="Lektionsbesvarelser" />
+          <NavigationProperty Name="Lektionsfilers" Relationship="Self.FK_dbo_Lektionsfiler_dbo_Lektion_LektionsId" FromRole="Lektion" ToRole="Lektionsfiler" />
+        </EntityType>
+        <EntityType Name="Lektionsbesvarelser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Filnavn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LektionsId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Lektion" Relationship="Self.FK_dbo_Lektionsbesvarelser_dbo_Lektion_LektionsId" FromRole="Lektionsbesvarelser" ToRole="Lektion" />
+        </EntityType>
+        <EntityType Name="Lektionsfiler">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Filnavn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LektionsId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Lektion" Relationship="Self.FK_dbo_Lektionsfiler_dbo_Lektion_LektionsId" FromRole="Lektionsfiler" ToRole="Lektion" />
+        </EntityType>
+        <EntityType Name="Semester">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Navn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PeriodeStart" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PeriodeSlut" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FagId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Fag" Relationship="Self.FK_dbo_Semester_dbo_Fag_FagId" FromRole="Semester" ToRole="Fag" />
+          <NavigationProperty Name="Lektions" Relationship="Self.FK_dbo_Lektion_dbo_Semester_SemesterId" FromRole="Semester" ToRole="Lektion" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Semester_dbo_Fag_FagId">
+          <End Role="Fag" Type="Self.Fag" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Semester" Type="Self.Semester" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fag">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Semester">
+              <PropertyRef Name="FagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Kode_dbo_Lektion_LektionsId">
+          <End Role="Lektion" Type="Self.Lektion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Kode" Type="Self.Kode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lektion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Kode">
+              <PropertyRef Name="LektionsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Lektion_dbo_Semester_SemesterId">
+          <End Role="Semester" Type="Self.Semester" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Lektion" Type="Self.Lektion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lektion">
+              <PropertyRef Name="SemesterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Lektionsbesvarelser_dbo_Lektion_LektionsId">
+          <End Role="Lektion" Type="Self.Lektion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Lektionsbesvarelser" Type="Self.Lektionsbesvarelser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lektion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lektionsbesvarelser">
+              <PropertyRef Name="LektionsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Lektionsfiler_dbo_Lektion_LektionsId">
+          <End Role="Lektion" Type="Self.Lektion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Lektionsfiler" Type="Self.Lektionsfiler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lektion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lektionsfiler">
+              <PropertyRef Name="LektionsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="DMUSys" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+          <EntitySet Name="Fags" EntityType="Self.Fag" />
+          <EntitySet Name="Kodes" EntityType="Self.Kode" />
+          <EntitySet Name="Lektions" EntityType="Self.Lektion" />
+          <EntitySet Name="Lektionsbesvarelsers" EntityType="Self.Lektionsbesvarelser" />
+          <EntitySet Name="Lektionsfilers" EntityType="Self.Lektionsfiler" />
+          <EntitySet Name="Semesters" EntityType="Self.Semester" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Semester_dbo_Fag_FagId" Association="Self.FK_dbo_Semester_dbo_Fag_FagId">
+            <End Role="Fag" EntitySet="Fags" />
+            <End Role="Semester" EntitySet="Semesters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Kode_dbo_Lektion_LektionsId" Association="Self.FK_dbo_Kode_dbo_Lektion_LektionsId">
+            <End Role="Lektion" EntitySet="Lektions" />
+            <End Role="Kode" EntitySet="Kodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Lektion_dbo_Semester_SemesterId" Association="Self.FK_dbo_Lektion_dbo_Semester_SemesterId">
+            <End Role="Semester" EntitySet="Semesters" />
+            <End Role="Lektion" EntitySet="Lektions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Lektionsbesvarelser_dbo_Lektion_LektionsId" Association="Self.FK_dbo_Lektionsbesvarelser_dbo_Lektion_LektionsId">
+            <End Role="Lektion" EntitySet="Lektions" />
+            <End Role="Lektionsbesvarelser" EntitySet="Lektionsbesvarelsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Lektionsfiler_dbo_Lektion_LektionsId" Association="Self.FK_dbo_Lektionsfiler_dbo_Lektion_LektionsId">
+            <End Role="Lektion" EntitySet="Lektions" />
+            <End Role="Lektionsfiler" EntitySet="Lektionsfilers" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DMUSysModelStoreContainer" CdmEntityContainer="DMUSys">
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="DMUSysModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="DMUSysModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="DMUSysModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="DMUSysModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="DMUSysModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Fags">
+            <EntityTypeMapping TypeName="DMUSysModel.Fag">
+              <MappingFragment StoreEntitySet="Fag">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fagnavn" ColumnName="Fagnavn" />
+                <ScalarProperty Name="friendlyFagNavn" ColumnName="friendlyFagNavn" />
+                <ScalarProperty Name="Fagbeskrivelse" ColumnName="Fagbeskrivelse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kodes">
+            <EntityTypeMapping TypeName="DMUSysModel.Kode">
+              <MappingFragment StoreEntitySet="Kode">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Indhold" ColumnName="Indhold" />
+                <ScalarProperty Name="Opgavenavn" ColumnName="Opgavenavn" />
+                <ScalarProperty Name="LektionsId" ColumnName="LektionsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lektions">
+            <EntityTypeMapping TypeName="DMUSysModel.Lektion">
+              <MappingFragment StoreEntitySet="Lektion">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Lektionafholdelsestid" ColumnName="Lektionafholdelsestid" />
+                <ScalarProperty Name="Lektionnummer" ColumnName="Lektionnummer" />
+                <ScalarProperty Name="Lektionsbeskrivelse" ColumnName="Lektionsbeskrivelse" />
+                <ScalarProperty Name="SemesterId" ColumnName="SemesterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lektionsbesvarelsers">
+            <EntityTypeMapping TypeName="DMUSysModel.Lektionsbesvarelser">
+              <MappingFragment StoreEntitySet="Lektionsbesvarelser">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Filnavn" ColumnName="Filnavn" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="LektionsId" ColumnName="LektionsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lektionsfilers">
+            <EntityTypeMapping TypeName="DMUSysModel.Lektionsfiler">
+              <MappingFragment StoreEntitySet="Lektionsfiler">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Filnavn" ColumnName="Filnavn" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="LektionsId" ColumnName="LektionsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Semesters">
+            <EntityTypeMapping TypeName="DMUSysModel.Semester">
+              <MappingFragment StoreEntitySet="Semester">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Navn" ColumnName="Navn" />
+                <ScalarProperty Name="PeriodeStart" ColumnName="PeriodeStart" />
+                <ScalarProperty Name="PeriodeSlut" ColumnName="PeriodeSlut" />
+                <ScalarProperty Name="FagId" ColumnName="FagId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="DMUSysModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetRoles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="AspNetUsers">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

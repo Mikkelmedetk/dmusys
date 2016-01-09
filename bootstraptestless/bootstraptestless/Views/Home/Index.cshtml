@@ -1,0 +1,567 @@
+﻿@model bootstraptestless.ViewModels.HomeViewModel
+
+@{
+    ViewBag.Title = Model.valgtFag.Fagnavn;
+    int counter = 0;
+    var lektionNummer = "";
+}
+
+
+<div class="container">
+    <h1>@Html.DisplayFor(model => model.valgtFag.Fagnavn) <span style="background-color:#444444;font-size:small;color:#FFFFFF;padding:2px;">&nbsp;#@Html.DisplayFor(model => model.valgtSemester.Navn) Semester&nbsp;</span></h1>
+    <div class="row">
+        <div class="col-lg-6">
+            <b>Vælg semester:</b>
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "selectSemester" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
+                @Html.HiddenFor(v => v.valgtFag.friendlyFagNavn)
+                @Html.DropDownList("valgtSemester", Model.ddlSemestre, new { @class = "form-control multiselect multiselect-icon", onchange = "this.form.submit();" })
+            }
+            <br />
+        </div>
+        <div class="col-lg-6">
+            <div>
+                <div class="btn-group" style="padding-top:20px;float:right;">
+                    <div class="btn btn-group">
+                        <a class="btn btn-primary dropdown-toggle" style="margin-right:5px;" data-toggle="dropdown" href="#">
+                            <i class="glyphicon glyphicon-paperclip"></i>&nbsp;Filer
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-left">
+                            <li><a href="#" data-toggle='modal' data-target='#Kodebesvarelser'>Opret/Slet kodebesvarelse</a></li>
+                            <li><a href="#" data-toggle='modal' data-target='#UploadLektionsfiler'>Upload/Slet Lektionsfiler</a></li>
+                            <li><a href="#" data-toggle='modal' data-target='#UploadLektionsbesvarelser'>Upload/Slet Lektionsbesvarelser</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn btn-group">
+                        <a class="btn btn-primary dropdown-toggle" style="margin-left:-25px;" data-toggle="dropdown" href="#">
+                            <i class="glyphicon glyphicon-file"></i>&nbsp;Lektion
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-left">
+                            <li><a href="#" data-toggle='modal' data-target='#myModal'>Opret Lektion</a></li>
+                            <li><a href="#" data-toggle='modal' data-target='#RedigerLektion'>Rediger Lektion</a></li>
+                        </ul>
+                        </div>
+
+                        @*<a class="btn btn-primary" href="#" role="button" data-toggle='modal' data-target='#myModal'><i class="glyphicon glyphicon-pencil"></i>&nbsp;Opret lektion</a>*@
+                    </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!----Udvalgt lektion---->
+<div style="background-color:#000">
+    <div class="container">
+
+        <div class="row" id="valgtLektion">
+            <h2>Valgt lektion</h2>
+            <div class="col-lg-4">
+                <div style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
+                    @if (Model.valgtLektion != null)
+                    {
+                    <h3>Lektion # @Html.DisplayFor(model => model.valgtLektion.Lektionnummer)</h3>
+                    }
+                    <p class="small" style="color:black;">
+                        @if(Model.valgtLektion != null) { 
+                        <span style="color:black;font-weight:bold;">Afholdt den </span>@Model.valgtLektion.Lektionafholdelsestid.ToString("dd/MM-yyyy - HH:mm") @:</span>
+                        <br /><span style="color:black">@Model.valgtLektion.Lektionsbeskrivelse</span>
+                        }
+                    </p>
+                </div>
+                <br />
+            </div>
+            <div class="col-lg-4">
+                <div class="activeLektion" id="Opgaver" style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
+                    <h3>Lektionsfiler</h3>
+                @if (Model.lektionsfiler != null) {
+                    if(Model.lektionsfiler.Count() > 0) {
+                        foreach (var item in Model.lektionsfiler)
+                        {
+                        <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Filnavn</a></small><br />
+                    }
+                }
+                }
+                </div><br />
+            </div>
+            <div class="col-lg-4">
+                <div class="activeLektion" id="Besvarelser" style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
+                    <h3>Besvarelser</h3>
+                    @if (Model.kodebesvarelser != null && Model.kodebesvarelser.Count() > 0)
+                    {
+                        foreach (var item in Model.kodebesvarelser)
+                        {
+                            <small><a href="#" class="kodebesvarelse" kodeid="@item.Id" target="_blank"><i class="glyphicon glyphicon-console"></i>&nbsp;@item.Opgavenavn</a>&nbsp; <a href="#" class="kodeedit" alt="edit" kodeid="@item.Id" target="_blank"><i class="glyphicon glyphicon-edit"></i></a></small><br />
+                        }
+                    }
+                    @if (Model.lektionsbesvarelser != null && Model.lektionsbesvarelser.Count() > 0) {
+                        foreach (var item in Model.lektionsbesvarelser)
+                        {
+                        <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Filnavn</a></small><br />
+                    }
+                    }
+                </div>
+                <br />
+            </div>
+        </div>
+        
+    </div>
+    <br />
+</div>
+
+<!--Tidligere lektioner-->
+
+<div class="container">
+    <h2>Tidligere lektioner</h2>
+    <div class="row">
+    @if(Model.relateredeLektioner.Count() > 0) {
+        foreach (var item in Model.relateredeLektioner.Take(Model.relateredeLektioner.Count()).OrderByDescending(l => l.Id))
+        {
+            if (counter % 4 == 0)
+            {
+            @:</div>
+            @:<div class="row">
+        } 
+
+    <div class="col-lg-3" onclick='location.href="@Url.Action("Index", "Home", new { valgtFag = Model.valgtFag.friendlyFagNavn, valgtSemester = Model.valgtSemester.Id, valgtLektion = item.Id})"'>
+        @if (Request.QueryString["valgtLektion"] != null && Request.QueryString["valgtLektion"].Equals(item.Id.ToString()))
+        {
+            <div class="afholdtLektion" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;border-left:3px solid #FC4349;min-height:200px;">
+                <i style="font-size:1.5em;color:limegreen;position:absolute;top:25px;left:230px;z-index:1000;" class="glyphicon glyphicon-ok-circle glyphicon-remove-circle img-rounded"></i>
+                <input name="ID" value="@item.Id" class="LektionId" type="hidden" />
+                <h3>Lektion @item.Lektionnummer</h3>
+                <p class="small" style="color:black;">
+                    <span style="color:black;font-weight:bold;">Afholdt den </span>@item.Lektionafholdelsestid.ToString("dd/MM-yyyy HH:mm")<br />
+                    @item.Lektionsbeskrivelse
+                </p>
+                <p class="small">
+                    <b>Besvarelser:</b> @item.Lektionsbesvarelser.Count(); <br />
+                    @if (Model.valgtFag.friendlyFagNavn.Equals("programmering"))
+                    {
+                        <b>Kodebesvarelser:</b> @item.Kodebesvarelser.Count();
+                    }
+                </p>
+            </div>
+        }
+        else if (@Model.relateredeLektioner.Last() == item && Request.QueryString["valgtLektion"] == null)
+        {
+            <div class="afholdtLektion" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;border-left:3px solid #FC4349;min-height:200px;">
+                <i style="font-size:1.5em;color:limegreen;position:absolute;top:25px;left:230px;z-index:1000;" class="glyphicon glyphicon-ok-circle glyphicon-remove-circle img-rounded"></i>
+                <input name="ID" value="@item.Id" class="LektionId" type="hidden" />
+                <h3>Lektion @item.Lektionnummer</h3>
+                <p class="small" style="color:black;">
+                    <span style="color:black;font-weight:bold;">Afholdt den </span>@item.Lektionafholdelsestid.ToString("dd/MM-yyyy HH:mm")<br />
+                    @item.Lektionsbeskrivelse
+                </p>
+                <p class="small">
+                    <b>Besvarelser:</b> @item.Lektionsbesvarelser.Count(); <br />
+                    @if (Model.valgtFag.friendlyFagNavn.Equals("programmering"))
+                    {
+                        <b>Kodebesvarelser:</b> @item.Kodebesvarelser.Count();
+                    }
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="afholdtLektion" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;border-left:3px solid #FC4349;min-height:200px;">
+                <input name="ID" value="@item.Id" class="LektionId" type="hidden" />
+                <h3>Lektion @item.Lektionnummer</h3>
+                <p class="small" style="color:black;">
+                    <span style="color:black;font-weight:bold;">Afholdt den </span>@item.Lektionafholdelsestid.ToString("dd/MM-yyyy HH:mm")<br />
+                    @item.Lektionsbeskrivelse
+                </p>
+                <p class="small">
+                    <b>Besvarelser:</b> @item.Lektionsbesvarelser.Count(); <br />
+                    @if (Model.valgtFag.friendlyFagNavn.Equals("programmering"))
+                    {
+                        <b>Kodebesvarelser:</b> @item.Kodebesvarelser.Count();
+                    }
+                </p>
+            </div>
+        }
+<br />
+    </div>
+            if (counter % 4 == 4)
+            {
+        @:</div>
+    }
+        counter++;
+        }
+    }
+    </div>
+
+    <!-- Modal til at oprette lektioner -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" style="z-index:1051;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="display:none;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                </div>
+
+                @using (Html.BeginForm("opretLektion", "Home", FormMethod.Post))
+            {
+                    <div class="modal-body">
+                        <h2>Opret lektion</h2><br />
+                        <div class="container">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary()
+                            @Html.Hidden("fagnavn", Model.valgtFag.friendlyFagNavn)
+                            @Html.Hidden("semesterid", Model.valgtSemester.Id)
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.opretLektion.Lektionafholdelsestid, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div style="width:41.5%;">
+                                        <div class="input-group date" id="datepicker1">
+                                            <input type="text" class="form-control" id="opretLektion.Lektionafholdelsestid" name="opretLektion.Lektionafholdelsestid" value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm")" aria-describedby="sizing-addon1">
+                                            <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-calendar"></i></span>
+                                        </div>
+                                            @Html.ValidationMessageFor(model => model.opretLektion.Lektionafholdelsestid, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.opretLektion.Lektionnummer, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div>
+                                        @Html.EditorFor(model => model.opretLektion.Lektionnummer, new { htmlAttributes = new { @class = "form-control", @Value = Model.valgtSemester.Lektioner.Count + 1, @Type = "text", @readonly = "true" } })
+                                        @Html.ValidationMessageFor(model => model.opretLektion.Lektionnummer, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.opretLektion.Lektionsbeskrivelse, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div>
+                                       @Html.TextAreaFor(model => model.opretLektion.Lektionsbeskrivelse, new { @class = "form-control", cols = "100", rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.opretLektion.Lektionsbeskrivelse, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="this.form.submit();">Opret Lektion</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal til at oprette lektioner -->
+<!-- Modal -->
+<div class="modal fade" id="RedigerLektion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" style="z-index:1051;" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:none;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+
+            @using (Html.BeginForm("redigerLektion", "Home", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <h2>Rediger Lektion #@Model.valgtLektion.Lektionnummer </h2><br />
+                    <div class="container">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary()
+                        @Html.Hidden("fagnavn", Model.valgtFag.friendlyFagNavn)
+                        @Html.Hidden("semesterid", Model.valgtSemester.Id)
+                        @Html.Hidden("lektionsId", Model.valgtLektion.Id)
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.opretLektion.Lektionafholdelsestid, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div style="width:41.5%;">
+                                <div class="input-group date" id="datepicker2">
+                                    <input type="text" class="form-control" id="opretLektion.Lektionafholdelsestid" name="opretLektion.Lektionafholdelsestid" value="@Model.valgtLektion.Lektionafholdelsestid" aria-describedby="sizing-addon2">
+                                    <span class="input-group-addon" id="sizing-addon2"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+
+                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionafholdelsestid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.opretLektion.Lektionnummer, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div>
+                                @Html.EditorFor(model => model.opretLektion.Lektionnummer, new { htmlAttributes = new { @class = "form-control", @Value = Model.valgtLektion.Lektionnummer, @Type = "text", @readonly = "true" } })
+                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionnummer, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.opretLektion.Lektionsbeskrivelse, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div>
+                                @Html.TextAreaFor(model => model.opretLektion.Lektionsbeskrivelse,  new { @class = "form-control", @id="redigerTextArea", placeholder = @Model.valgtLektion.Lektionsbeskrivelse,  cols = "100", rows = "5" })
+                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionsbeskrivelse, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="this.form.submit();">Rediger Lektion</button>
+                    </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Modal til at oprette lektioner -->
+<!-- Modal -->
+<div class="modal fade" id="UploadLektionsfiler" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" style="z-index:1051;" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:none;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+                <div class="modal-body">
+                    @if (Model.valgtLektion.Lektionsfiler.Count() > 0)
+                    {
+                    <h2>Filer</h2>
+                        foreach (var item in Model.valgtLektion.Lektionsfiler)
+                        {
+
+                            <div><i style="cursor:pointer;padding-left:5px;color:darkred" dataid="@item.Id" linktype="Lektionsfil" datafilname="@item.Filnavn" class="glyphicon glyphicon-remove deleteItem"></i>&nbsp;  @item.Filnavn  <br /></div>
+                        }
+                    }
+                    <h2>Upload Lektionsbesvarelser</h2><br />
+                    <div class="container">
+                        <form action="~/Home/SaveUploadedFile" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+                            <input type="hidden" name="valgtFag" value="@Model.valgtFag.friendlyFagNavn">
+                            <input type="hidden" name="valgtSemester" value="@Model.valgtSemester.Id">
+                            <input type="hidden" name="valgtLektion" value="@Model.valgtLektion.Id">
+                            <input type="hidden" name="Lektionsnummer" value="@Model.valgtLektion.Lektionnummer">
+                            <input type="hidden" name="Lektionstype" value="Lektionsfiler">
+                            <div class="fallback">
+                                <input name="file" type="file" multiple />
+                                <input type="submit" value="Upload" />
+                            </div>
+                        </form>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="location.reload();" data-dismiss="modal">Close</button>
+                      
+                    </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<div class="modal fade" id="UploadLektionsbesvarelser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" style="z-index:1052;" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:none;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+            <div class="modal-body">
+                @if(Model.valgtLektion != null) { 
+                if (Model.valgtLektion.Lektionsbesvarelser.Count > 0)
+                {
+
+                    <h2>Filer</h2>
+                    foreach (var item in Model.valgtLektion.Lektionsbesvarelser)
+                    {
+
+                        <div><i style="cursor:pointer;padding-left:5px;color:darkred" dataid="@item.Id" linktype="Lektionsbesvarelse" datafilname="@item.Filnavn" class="glyphicon glyphicon-remove deleteItem"></i>&nbsp;  @item.Filnavn  <br /></div>
+                    }
+                }
+                }
+                <h2>Upload Lektionsbesvarelser</h2><br />
+                <div class="container">
+                    <form action="~/Home/SaveUploadedFileBesvarelse" method="post" enctype="multipart/form-data" id="dropzoneSecond" class="dropzone">
+                        <input type="hidden" name="valgtFag" value="@Model.valgtFag.friendlyFagNavn">
+                        <input type="hidden" name="valgtSemester" value="@Model.valgtSemester.Id">
+                        <input type="hidden" name="valgtLektion" value="@Model.valgtLektion.Id">
+                        <input type="hidden" name="Lektionsnummer" value="@Model.valgtLektion.Lektionnummer">
+                        <input type="hidden" name="Lektionstype" value="Lektionsbesvarelser">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple />
+                            <input type="submit" value="Upload" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="location.reload();" data-dismiss="modal">Close</button>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---CRUD kodebesvarelser-->
+
+<div class="modal fade" id="Kodebesvarelser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" style="z-index:1052;" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:none;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+            <div class="modal-body">
+                    @if (Model.kodebesvarelser != null && Model.kodebesvarelser.Count() > 0)
+                    {
+
+                        <h2>Kodebesvarelser</h2>
+                        foreach (var item in Model.kodebesvarelser)
+                        {
+
+                            <div><i style="cursor:pointer;padding-left:5px;color:darkred" dataid="@item.Id" class="glyphicon glyphicon-remove deleteKode"></i>&nbsp;  @item.Opgavenavn  <br /></div>
+                        }
+                    }
+                <h2>Opret Kodebesvarelser</h2><br />
+                @using(Html.BeginForm("opretKodebesvarelse", "Home", FormMethod.Post))
+                {
+                <div class="container">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.Hidden("fagnavn", Model.valgtFag.friendlyFagNavn)
+                    @Html.Hidden("semesterid", Model.valgtSemester.Id)
+                    @Html.Hidden("inLektionsId", Model.valgtLektion.Id)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.opretKodebesvarelse.Opgavenavn, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div>
+                            @Html.EditorFor(model => model.opretKodebesvarelse.Opgavenavn, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.opretKodebesvarelse.Opgavenavn, "", new { @class = "text-danger" })
+                        </div>
+                    </div>  
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="this.form.submit();">Opret kodebesvarelse</button>
+                    <button type="button" class="btn btn-default" onclick="location.reload();" data-dismiss="modal">Close</button>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+        <script type="text/javascript">
+
+            $(function () {
+                $('#datepicker1').datetimepicker({
+                    locale: 'da'
+                });
+                $('#datepicker2').datetimepicker({
+                    locale: 'da'
+                });
+            });
+            $(document).ready(function () {
+
+                $(".kodebesvarelse").click(function (e) {
+                    e.preventDefault();
+                    var windowsize = "width="+ screen.availWidth +",height=" + screen.availHeight + ",scrollbars=yes";
+                    var windowName = $(this).html();
+                    var url = "@Request.Url.GetLeftPart(UriPartial.Authority)" + "/KodeView/" + "@Model.valgtLektion.Id" + "/" + $(this).attr("kodeid") + "/false";
+
+                    window.open(url, windowName, windowsize);
+
+                });
+
+                $(".kodeedit").click(function (e) {
+                    e.preventDefault();
+                    var windowsize = "width=" + screen.availWidth + ",height=" + screen.availHeight + ",scrollbars=yes";
+                    var windowName = $(this).html();
+                    var url = "@Request.Url.GetLeftPart(UriPartial.Authority)" + "/KodeView/" + "@Model.valgtLektion.Id" + "/" + $(this).attr("kodeid") + "/true";
+
+                    window.open(url, windowName, windowsize);
+
+                });
+
+
+                $("#redigerTextArea").html("@Model.valgtLektion.Lektionsbeskrivelse");
+
+                $(".afholdtLektion").mouseover(function () {
+                    $(this).css('background-color', '#C2C2C2');
+                });
+
+                $(".afholdtLektion").mouseout(function () {
+                    $(this).css('background-color', '#F0F0F0');
+                });
+
+                $(".deleteItem").click(function (e) {
+                    e.preventDefault();
+                    var itemValue = $(this).attr("dataid");
+                    var itemFilname = $(this).attr("datafilname");
+                    var itemlinktype = $(this).attr("linktype");
+                    $.post("@Url.Action("deleteLink", "Home")", { linkid: itemValue, filename: itemFilname, linktype: itemlinktype });
+                    $(this).parent().remove();
+                });
+
+            $(".deleteKode").click(function (e) {
+                e.preventDefault();
+                var itemValue = $(this).attr("dataid");
+                $.post("@Url.Action("deleteKodebesvarelse", "Home")", { kodeid: itemValue });
+                $(this).parent().remove();
+            });
+            });
+
+
+
+
+        </script>
+<script>
+    Dropzone.options.dropzoneForm = {
+        autoProcessQueue: false,
+        parallelUploads: 6,
+
+        init: function () {
+            
+            var submitButton = document.querySelector("#submit-all")
+            myDropzone = this; // closure
+
+            submitButton.addEventListener("click", function () {
+                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+            });
+
+            this.on("complete", function (data) {
+
+                var res = JSON.parse(data.xhr.responseText);
+            });
+
+            this.on("processing", function () {
+                this.options.autoProcessQueue = true;
+            });
+        }
+    };
+
+    Dropzone.options.dropzoneSecond = {
+        autoProcessQueue: false,
+        parallelUploads: 6,
+
+        init: function () {
+            var submitButton = document.querySelector("#submit-all")
+            myDropzone = this; // closure
+
+            submitButton.addEventListener("click", function () {
+                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+            });
+
+            this.on("complete", function (data) {
+
+                var res = JSON.parse(data.xhr.responseText);
+            });
+
+            this.on("processing", function () {
+                this.options.autoProcessQueue = true;
+            });
+        }
+    };
+</script>
