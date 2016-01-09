@@ -1,0 +1,43 @@
+﻿<div class="modal fade" id="UploadLektionsbesvarelser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" style="z-index:1052;" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:none;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+            <div class="modal-body">
+                @if (Model.valgtLektion != null)
+                {
+                    if (Model.valgtLektion.Lektionsbesvarelser.Count > 0)
+                    {
+
+                        <h2>Filer</h2>
+                        foreach (var item in Model.valgtLektion.Lektionsbesvarelser)
+                        {
+
+                            <div><i style="cursor:pointer;padding-left:5px;color:darkred" dataid="@item.Id" linktype="Lektionsbesvarelse" datafilname="@item.Filnavn" class="glyphicon glyphicon-remove deleteItem"></i>&nbsp;  @item.Filnavn  <br /></div>
+                        }
+                    }
+                }
+                <h2>Upload Lektionsbesvarelser</h2><br />
+                <div class="container">
+                    <form action="~/Home/SaveUploadedFileBesvarelse" method="post" enctype="multipart/form-data" id="dropzoneSecond" class="dropzone">
+                        <input type="hidden" name="valgtFag" value="@Model.valgtFag.friendlyFagNavn">
+                        <input type="hidden" name="valgtSemester" value="@Model.valgtSemester.Id">
+                        <input type="hidden" name="valgtLektion" value="@Model.valgtLektion.Id">
+                        <input type="hidden" name="Lektionsnummer" value="@Model.valgtLektion.Lektionnummer">
+                        <input type="hidden" name="Lektionstype" value="Lektionsbesvarelser">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple />
+                            <input type="submit" value="Upload" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="location.reload();" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

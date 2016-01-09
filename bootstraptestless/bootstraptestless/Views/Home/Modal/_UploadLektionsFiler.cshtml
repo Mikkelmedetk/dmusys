@@ -1,0 +1,39 @@
+﻿<div class="modal fade" id="UploadLektionsfiler" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" style="z-index:1051;" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:none;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+            <div class="modal-body">
+                @if (Model.valgtLektion.Lektionsfiler.Count > 0)
+                {
+                    <h2>Filer</h2>
+                    foreach (var item in Model.valgtLektion.Lektionsfiler)
+                    {
+
+                        <div><i style="cursor:pointer;padding-left:5px;color:darkred" dataid="@item.Id" linktype="Lektionsfil" datafilname="@item.Filnavn" class="glyphicon glyphicon-remove deleteItem"></i>&nbsp;  @item.Filnavn  <br /></div>
+                    }
+                }
+                <h2>Upload Lektionsfiler</h2><br />
+                <div class="container">
+                    <form action="~/Home/SaveUploadedFile" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+                        <input type="hidden" name="valgtFag" value="@Model.valgtFag.friendlyFagNavn">
+                        <input type="hidden" name="valgtSemester" value="@Model.valgtSemester.Id">
+                        <input type="hidden" name="valgtLektion" value="@Model.valgtLektion.Id">
+                        <input type="hidden" name="Lektionsnummer" value="@Model.valgtLektion.Lektionnummer">
+                        <input type="hidden" name="Lektionstype" value="Lektionsfiler">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple />
+                            <input type="submit" value="Upload" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="location.reload();" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+﻿<script type="text/javascript">
+
+            $(function () {
+                $('#datepicker1').datetimepicker({
+                    locale: 'da'
+                });
+                $('#datepicker2').datetimepicker({
+                    locale: 'da'
+                });
+            });
+            $(document).ready(function () {
+
+                $(".kodebesvarelse").click(function (e) {
+                    e.preventDefault();
+                    var windowsize = "width="+ screen.availWidth +",height=" + screen.availHeight + ",scrollbars=yes";
+                    var windowName = $(this).html();
+                    var url = "@Request.Url.GetLeftPart(UriPartial.Authority)" + "/KodeView/" + "@Model.valgtLektion.Id" + "/" + $(this).attr("kodeid") + "/false";
+
+                    window.open(url, windowName, windowsize);
+
+                });
+
+                $(".kodeedit").click(function (e) {
+                    e.preventDefault();
+                    var windowsize = "width=" + screen.availWidth + ",height=" + screen.availHeight + ",scrollbars=yes";
+                    var windowName = $(this).html();
+                    var url = "@Request.Url.GetLeftPart(UriPartial.Authority)" + "/KodeView/" + "@Model.valgtLektion.Id" + "/" + $(this).attr("kodeid") + "/true";
+
+                    window.open(url, windowName, windowsize);
+
+                });
+
+
+                $("#redigerTextArea").html("@Model.valgtLektion.Lektionsbeskrivelse");
+
+                $(".afholdtLektion").mouseover(function () {
+                    $(this).css('background-color', '#C2C2C2');
+                });
+
+                $(".afholdtLektion").mouseout(function () {
+                    $(this).css('background-color', '#F0F0F0');
+                });
+
+                $(".deleteItem").click(function (e) {
+                    e.preventDefault();
+                    var itemValue = $(this).attr("dataid");
+                    var itemFilname = $(this).attr("datafilname");
+                    var itemlinktype = $(this).attr("linktype");
+                    $.post("@Url.Action("deleteLink", "Home")", { linkid: itemValue, filename: itemFilname, linktype: itemlinktype });
+                    $(this).parent().remove();
+                });
+
+            $(".deleteKode").click(function (e) {
+                e.preventDefault();
+                var itemValue = $(this).attr("dataid");
+                $.post("@Url.Action("deleteKodebesvarelse", "Home")", { kodeid: itemValue });
+                $(this).parent().remove();
+            });
+            });
+
+
+
+
+</script>
+<script>
+    Dropzone.options.dropzoneForm = {
+        autoProcessQueue: false,
+        parallelUploads: 6,
+
+        init: function () {
+
+            var submitButton = document.querySelector("#submit-all")
+            myDropzone = this; // closure
+
+            submitButton.addEventListener("click", function () {
+                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+            });
+
+            this.on("complete", function (data) {
+
+                var res = JSON.parse(data.xhr.responseText);
+            });
+
+            this.on("processing", function () {
+                this.options.autoProcessQueue = true;
+            });
+        }
+    };
+
+    Dropzone.options.dropzoneSecond = {
+        autoProcessQueue: false,
+        parallelUploads: 6,
+
+        init: function () {
+            var submitButton = document.querySelector("#submit-all")
+            myDropzone = this; // closure
+
+            submitButton.addEventListener("click", function () {
+                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+            });
+
+            this.on("complete", function (data) {
+
+                var res = JSON.parse(data.xhr.responseText);
+            });
+
+            this.on("processing", function () {
+                this.options.autoProcessQueue = true;
+            });
+        }
+    };
+</script>

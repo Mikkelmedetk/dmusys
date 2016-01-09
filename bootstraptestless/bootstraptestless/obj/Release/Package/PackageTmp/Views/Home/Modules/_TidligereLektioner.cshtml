@@ -1,0 +1,85 @@
+﻿@model bootstraptestless.ViewModels.HomeViewModel
+@{
+        int counter = 0;
+}
+
+<div class="container">
+    <h2>Tidligere lektioner</h2>
+    <div class="row">
+        @if (Model.relateredeLektioner.Count() > 0)
+        {
+            foreach (var item in Model.relateredeLektioner.Take(Model.relateredeLektioner.Count()).OrderByDescending(l => l.Id))
+            {
+                if (counter % 4 == 0)
+                {
+                @:</div>
+                @:<div class="row">
+        }
+
+                <div class="col-lg-3" onclick='location.href="@Url.Action("Index", "Home", new { valgtFag = Model.valgtFag.friendlyFagNavn, valgtSemester = Model.valgtSemester.Id, valgtLektion = item.Id})"'>
+                    @if (Request.QueryString["valgtLektion"] != null && Request.QueryString["valgtLektion"].Equals(item.Id.ToString()))
+                    {
+                        <div class="afholdtLektion" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;border-left:3px solid #FC4349;min-height:200px;">
+                            <img style="position:absolute;top:25px;left:230px;z-index:1000;" src="~/Content/assets/check.png" />
+                            <input name="ID" value="@item.Id" class="LektionId" type="hidden" />
+                            <h3>Lektion @item.Lektionnummer</h3>
+                            <p class="small" style="color:black;">
+                                <span style="color:black;font-weight:bold;">Afholdt den </span>@item.Lektionafholdelsestid.ToString("dd/MM-yyyy HH:mm")<br />
+                                @item.Lektionsbeskrivelse
+                            </p>
+                            <p class="small">
+                                <b>Besvarelser:</b> @item.Lektionsbesvarelser.Count(); <br />
+                                @if (Model.valgtFag.friendlyFagNavn.Equals("programmering"))
+                                {
+                                    <b>Kodebesvarelser:</b> @item.Kodebesvarelser.Count();
+                                }
+                            </p>
+                        </div>
+                    }
+                    else if (@Model.relateredeLektioner.Last() == item && Request.QueryString["valgtLektion"] == null)
+                    {
+                        <div class="afholdtLektion" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;border-left:3px solid #FC4349;min-height:200px;">
+                            <img style="position:absolute;top:25px;left:230px;z-index:1000;" src="~/Content/assets/check.png" />
+                            <input name="ID" value="@item.Id" class="LektionId" type="hidden" />
+                            <h3>Lektion @item.Lektionnummer</h3>
+                            <p class="small" style="color:black;">
+                                <span style="color:black;font-weight:bold;">Afholdt den </span>@item.Lektionafholdelsestid.ToString("dd/MM-yyyy HH:mm")<br />
+                                @item.Lektionsbeskrivelse
+                            </p>
+                            <p class="small">
+                                <b>Besvarelser:</b> @item.Lektionsbesvarelser.Count(); <br />
+                                @if (Model.valgtFag.friendlyFagNavn.Equals("programmering"))
+                                {
+                                    <b>Kodebesvarelser:</b> @item.Kodebesvarelser.Count();
+                                }
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="afholdtLektion" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;border-left:3px solid #FC4349;min-height:200px;">
+                            <input name="ID" value="@item.Id" class="LektionId" type="hidden" />
+                            <h3>Lektion @item.Lektionnummer</h3>
+                            <p class="small" style="color:black;">
+                                <span style="color:black;font-weight:bold;">Afholdt den </span>@item.Lektionafholdelsestid.ToString("dd/MM-yyyy HH:mm")<br />
+                                @item.Lektionsbeskrivelse
+                            </p>
+                            <p class="small">
+                                <b>Besvarelser:</b> @item.Lektionsbesvarelser.Count(); <br />
+                                @if (Model.valgtFag.friendlyFagNavn.Equals("programmering"))
+                                {
+                                    <b>Kodebesvarelser:</b> @item.Kodebesvarelser.Count();
+                                }
+                            </p>
+                        </div>
+                    }
+                    <br />
+                </div>
+                if (counter % 4 == 4)
+                {
+                    @:</div>
+    }
+                counter++;
+            }
+        }
+    </div>

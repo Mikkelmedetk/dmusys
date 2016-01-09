@@ -1,0 +1,59 @@
+﻿@model bootstraptestless.ViewModels.HomeViewModel
+<div class="modal fade" id="RedigerLektion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" style="z-index:1051;" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:none;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            </div>
+
+            @using (Html.BeginForm("redigerLektion", "Home", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <h2>Rediger Lektion #@Model.valgtLektion.Lektionnummer </h2><br />
+                    <div class="container">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary()
+                        @Html.Hidden("fagnavn", Model.valgtFag.friendlyFagNavn)
+                        @Html.Hidden("semesterid", Model.valgtSemester.Id)
+                        @Html.Hidden("lektionsId", Model.valgtLektion.Id)
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.opretLektion.Lektionafholdelsestid, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div style="width:41.5%;">
+                                <div class="input-group date" id="datepicker2">
+                                    <input type="text" class="form-control" id="opretLektion.Lektionafholdelsestid" name="opretLektion.Lektionafholdelsestid" value="@Model.valgtLektion.Lektionafholdelsestid" aria-describedby="sizing-addon2">
+                                    <span class="input-group-addon" id="sizing-addon2"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+
+                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionafholdelsestid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.opretLektion.Lektionnummer, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div>
+                                @Html.EditorFor(model => model.opretLektion.Lektionnummer, new { htmlAttributes = new { @class = "form-control", @Value = Model.valgtLektion.Lektionnummer, @Type = "text", @readonly = "true" } })
+                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionnummer, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.opretLektion.Lektionsbeskrivelse, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div>
+                                @Html.TextAreaFor(model => model.opretLektion.Lektionsbeskrivelse, new { @class = "form-control", @id = "redigerTextArea", placeholder = @Model.valgtLektion.Lektionsbeskrivelse, cols = "100", rows = "5" })
+                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionsbeskrivelse, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="this.form.submit();">Rediger Lektion</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
