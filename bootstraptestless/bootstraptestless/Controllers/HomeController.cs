@@ -31,9 +31,9 @@ namespace bootstraptestless.Controllers
 
             else if (HttpContext.Request.HttpMethod == "POST")
             {
-                valgtFag = hvmodel.valgtFag.friendlyFagNavn;                
+                valgtFag = hvmodel.valgtFag.friendlyFagNavn;
             }
-            
+
 
             if (valgtSemester == null)
             {
@@ -46,14 +46,14 @@ namespace bootstraptestless.Controllers
 
                     return new HttpNotFoundResult();
                 }
-                
+
             }
 
 
 
 
             //Sætter henter det valgte fag fra parameteren
-            
+
             try
             {
                 hvm.valgtFag = _context._Fag.FirstOrDefault(f => f.friendlyFagNavn == valgtFag);
@@ -61,7 +61,7 @@ namespace bootstraptestless.Controllers
             catch (NullReferenceException)
             {
 
-                
+
             }
 
 
@@ -87,28 +87,30 @@ namespace bootstraptestless.Controllers
 
                 return new HttpNotFoundResult();
             }
-            
+
 
             if (valgtLektion == null)
             {
-                if(hvm.valgtSemester != null && hvm.valgtSemester.Lektioner.Select(l => l.Id).Count() > 0) { 
+                if (hvm.valgtSemester != null && hvm.valgtSemester.Lektioner.Select(l => l.Id).Count() > 0)
+                {
                     valgtLektion = hvm.valgtSemester.Lektioner.Select(l => l.Id).Last();
                 }
             }
 
-            hvm.valgtLektion = _context._Lektion.FirstOrDefault(l => l.Id == valgtLektion);
+            hvm.valgtLektion = _context._Lektion.Where(l => l.Id == valgtLektion).Include(m => m.Lektiontags).FirstOrDefault();
 
 
             if (hvm.valgtLektion != null && _context._Lektionsfiler.Where(lf => lf.LektionsId == hvm.valgtLektion.Id).Count() > 0)
             {
                 hvm.lektionsfiler = _context._Lektionsfiler.Where(lf => lf.LektionsId == hvm.valgtLektion.Id).ToList();
             }
-            
-            if(hvm.valgtLektion != null && _context._Lektionsbesvarelser.Where(lf => lf.LektionsId == hvm.valgtLektion.Id).Count() > 0) { 
-            hvm.lektionsbesvarelser = _context._Lektionsbesvarelser.Where(lf => lf.LektionsId == hvm.valgtLektion.Id).ToList();
+
+            if (hvm.valgtLektion != null && _context._Lektionsbesvarelser.Where(lf => lf.LektionsId == hvm.valgtLektion.Id).Count() > 0)
+            {
+                hvm.lektionsbesvarelser = _context._Lektionsbesvarelser.Where(lf => lf.LektionsId == hvm.valgtLektion.Id).ToList();
             }
 
-            if(hvm.valgtLektion != null && _context._Kode.Where(kb => kb.LektionsId == hvm.valgtLektion.Id).Count() > 0)
+            if (hvm.valgtLektion != null && _context._Kode.Where(kb => kb.LektionsId == hvm.valgtLektion.Id).Count() > 0)
             {
                 hvm.kodebesvarelser = _context._Kode.Where(kb => kb.LektionsId == hvm.valgtLektion.Id).ToList();
             }
@@ -126,18 +128,37 @@ namespace bootstraptestless.Controllers
 
         [Route("opretLektion")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult opretLektion(HomeViewModel hvm, string fagnavn, int semesterid)
         {
 
-                var semester = _context._Semester.Find(semesterid);
-                semester.Lektioner.Add(hvm.opretLektion);
-                Success(string.Format("<b>Lektion {0}</b> er blevet tilføjet semesteret", hvm.opretLektion.Lektionnummer), true);
-                _context._Semester.Attach(semester);
-                _context.SaveChanges();
+            var semester = _context._Semester.Find(semesterid);
+            if(hvm.lektiontags != null)
+            {
+            foreach (var item in hvm.lektiontags)
+            {
+                if (tagExist(item.tagName))
+                {
+                    var exisitingTag = _context._Tags.First(t => t.tagName == item.tagName);
+                    exisitingTag.Lektioner.Add(hvm.opretLektion);
+                    hvm.opretLektion.Lektiontags.Add(exisitingTag);
+                }
+                else
+                {
+                    hvm.opretLektion.Lektiontags.Add(item);
+                    item.Lektioner.Add(hvm.opretLektion);
+                }
+                }
+
+            }
+
+            semester.Lektioner.Add(hvm.opretLektion);
+            Success(string.Format("<b>Lektion {0}</b> er blevet tilføjet semesteret", hvm.opretLektion.Lektionnummer), true);
+            _context._Semester.Attach(semester);
+            _context.SaveChanges();
 
 
-            return RedirectToAction("Index", "Home", new { valgtFag =  fagnavn, valgtSemester = semesterid});
+
+            return Json(Url.Action("Index", "Home", new { valgtFag = fagnavn, valgtSemester = semesterid, valgtLektion = hvm.opretLektion.Id }));
         }
 
         [Route("redigerLektion")]
@@ -146,16 +167,16 @@ namespace bootstraptestless.Controllers
         public ActionResult redigerLektion(HomeViewModel hvm, string fagnavn, int semesterid, int lektionsId)
         {
 
-                var lektion = _context._Lektion.Find(lektionsId);
+            var lektion = _context._Lektion.Find(lektionsId);
 
-                lektion.Lektionafholdelsestid = hvm.opretLektion.Lektionafholdelsestid;
-                lektion.Lektionsbeskrivelse = hvm.opretLektion.Lektionsbeskrivelse;
-                _context.SaveChanges();
-                Success(string.Format("<b>Lektion {0}</b> er blevet redigereret", hvm.opretLektion.Lektionnummer), true);
+            lektion.Lektionafholdelsestid = hvm.opretLektion.Lektionafholdelsestid;
+            lektion.Lektionsbeskrivelse = hvm.opretLektion.Lektionsbeskrivelse;
+            _context.SaveChanges();
+            Success(string.Format("<b>Lektion {0}</b> er blevet redigereret", hvm.opretLektion.Lektionnummer), true);
 
 
 
-            return RedirectToAction("Index", "Home", new { valgtFag = fagnavn, valgtSemester = semesterid });
+            return RedirectToAction("Index", "Home", new { valgtFag = fagnavn, valgtSemester = semesterid, valgtLektion = lektionsId });
         }
 
         [Route("opretKodebesvarelse")]
@@ -178,7 +199,7 @@ namespace bootstraptestless.Controllers
         [HttpPost]
         public ActionResult deleteKodebesvarelse(int kodeid)
         {
-            var kodebesvarelse =_context._Kode.Find(kodeid);
+            var kodebesvarelse = _context._Kode.Find(kodeid);
             _context._Kode.Remove(kodebesvarelse);
             _context.SaveChanges();
             return View();
@@ -237,7 +258,7 @@ namespace bootstraptestless.Controllers
                 foreach (string fileName in Request.Files)
                 {
                     HttpPostedFileBase file = Request.Files[fileName];
-                    
+
                     //Save file content goes here
                     fName = file.FileName;
                     if (file != null && file.ContentLength > 0)
@@ -360,11 +381,13 @@ namespace bootstraptestless.Controllers
         [Route("Home/deleteLink")]
         public ActionResult deleteLink(int linkId, string filename, string linktype)
         {
-            if (linktype.Equals("Lektionsfil")) { 
+            if (linktype.Equals("Lektionsfil"))
+            {
                 Lektionsfiler lektionsfiler = _context._Lektionsfiler.Find(linkId);
                 _context._Lektionsfiler.Remove(lektionsfiler);
                 _context.SaveChanges();
-            } else if(linktype.Equals("Lektionsbesvarelse"))
+            }
+            else if (linktype.Equals("Lektionsbesvarelse"))
             {
                 Lektionsbesvarelser lektionsbesvarelse = _context._Lektionsbesvarelser.Find(linkId);
                 _context._Lektionsbesvarelser.Remove(lektionsbesvarelse);
@@ -375,7 +398,7 @@ namespace bootstraptestless.Controllers
                     .FirstOrDefault();
             if (file == null)
             {
-    
+
             }
             else
             {
@@ -385,6 +408,58 @@ namespace bootstraptestless.Controllers
             return View();
         }
 
+        public bool tagExist(string Tag)
+        {
+            bool tagIsExisting = false;
+
+            if (_context._Tags.Any(t => t.tagName == Tag))
+            {
+                tagIsExisting = true;
+            }
+
+            return tagIsExisting;
+        }
+
+        [Route("connectTagToLektion")]
+        [HttpPost]
+        public ActionResult connectTagToLektion(HomeViewModel hvm, int valgtLektion)
+        {
+            if(tagExist(hvm.opretTag.tagName)) {
+                Tag tag = _context._Tags.SingleOrDefault(t => t.tagName == hvm.opretTag.tagName);
+                var lektion = _context._Lektion.Find(valgtLektion);
+                tag.Lektioner.Add(lektion);
+                _context._Tags.Attach(tag);
+                _context.SaveChanges();
+
+                return Json(HttpStatusCode.OK);
+            } else
+            {
+                Tag tag = _context._Tags.Add(hvm.opretTag);
+                _context._Lektion.FirstOrDefault(l => l.Id == valgtLektion).Lektiontags.Add(tag);
+                _context.SaveChanges();
+                return Json(HttpStatusCode.OK);
+            }
+        }
+
+        [Route("removeTagFromLektion")]
+        [HttpPost]
+        public ActionResult removeTagFromLektion(HomeViewModel hvm, int valgtLektion)
+        {
+
+            var tag = _context._Tags.Include(l => l.Lektioner).FirstOrDefault(t => t.tagName == hvm.opretTag.tagName);
+
+            var lektion =_context._Lektion.Include(t => t.Lektiontags).FirstOrDefault(l => l.Id == valgtLektion);
+            lektion.Lektiontags.Remove(tag);
+            _context.SaveChanges();
+
+            if(tag.Lektioner.Count() == 0)
+            {
+                _context._Tags.Remove(tag);
+                _context.SaveChanges();
+            }
+
+            return Json(HttpStatusCode.OK);
+        }
 
 
     }

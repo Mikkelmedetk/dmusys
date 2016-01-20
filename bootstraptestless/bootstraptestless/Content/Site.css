@@ -82,3 +82,11 @@ textarea {
 .activeItem {
     background-color:#000;
 }
+
+#myTags {
+    width:280px; !important
+}
+
+#redigermyTags {
+    width:280px; !important
+}

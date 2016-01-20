@@ -19,10 +19,20 @@ namespace bootstraptestless.Models
         public DbSet<Lektionsfiler> _Lektionsfiler { get; set; }
         public DbSet<Lektionsbesvarelser> _Lektionsbesvarelser { get; set; }
         public DbSet<Kode> _Kode { get; set; }
+        public DbSet<Tag> _Tags { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<Lektion>()
+                .HasMany<Tag>(t => t.Lektiontags)
+                .WithMany(l => l.Lektioner)
+                .Map(lt =>
+                {
+                    lt.MapLeftKey("LektionsId");
+                    lt.MapRightKey("TagId");
+                    lt.ToTable("LektionToTag");
+                });
         }
     }
 }

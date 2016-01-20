@@ -15,19 +15,17 @@ namespace bootstraptestless.Models
             this.Lektionsfiler = new HashSet<Lektionsfiler>();
             this.Lektionsbesvarelser = new HashSet<Lektionsbesvarelser>();
             this.Kodebesvarelser = new HashSet<Kode>();
+            this.Lektiontags = new HashSet<Tag>();
 
         }
         public int Id { get; set; }
-        [Required(ErrorMessage = "Afholdelsestid skal udfyldes.")]
         public DateTime Lektionafholdelsestid { get; set; }
-        [Required(ErrorMessage = "Lektionsnummer skal udfyldes.")]
         public int Lektionnummer { get; set; }
-        [Required(ErrorMessage = "Lektionsbeskrivelse skal udfyldes")]
-        [StringLength(75, MinimumLength = 5, ErrorMessage = "Skal være imellem 5 og 75 tegn")]
         public string Lektionsbeskrivelse { get; set; }
         public ICollection<Lektionsfiler> Lektionsfiler { get; set; }
         public ICollection<Lektionsbesvarelser> Lektionsbesvarelser { get; set; }
         public ICollection<Kode> Kodebesvarelser { get; set; }
+        public ICollection<Tag> Lektiontags { get; set; }
 
         public int SemesterId { get; set; }
 

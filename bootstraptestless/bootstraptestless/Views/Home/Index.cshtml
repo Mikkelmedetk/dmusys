@@ -76,36 +76,99 @@
                 <br />
             </div>
             <div class="col-lg-4">
-                <div class="activeLektion" id="Opgaver" style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
-                    <h3>Lektionsfiler</h3>
-                @if (Model.lektionsfiler != null) {
-                    if(Model.lektionsfiler.Count() > 0) {
-                        foreach (var item in Model.lektionsfiler)
-                        {
-                        <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Filnavn</a></small><br />
-                    }
-                }
-                }
-                </div><br />
-            </div>
-            <div class="col-lg-4">
-                <div class="activeLektion" id="Besvarelser" style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
-                    <h3>Besvarelser</h3>
-                    @if (Model.kodebesvarelser != null && Model.kodebesvarelser.Count() > 0)
+    
+    @if(Model.lektionsfiler != null)
+    {
+
+    if ( Model.lektionsfiler.Count() <= 7)
+    {
+                @:<div class="activeLektion" id="Opgaver" style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
+
+                            @:<h3>Lektionsfiler</h3>
+                            foreach (var item in Model.lektionsfiler)
+                            {
+                                 <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Filnavn</a></small><br />
+                            }
+
+                @:</div>
+    }
+    else
+    {
+        @:<div class="activeLektion" id="Opgaver" style="min-height:200px;">
+                @:<div id="front" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;">
+                @:<h3>Lektionsfiler</h3>
+                  foreach (var item in Model.lektionsfiler.Take(5))
                     {
-                        foreach (var item in Model.kodebesvarelser)
-                        {
-                            <small><a href="#" class="kodebesvarelse" kodeid="@item.Id" target="_blank"><i class="glyphicon glyphicon-console"></i>&nbsp;@item.Opgavenavn</a>&nbsp; <a href="#" class="kodeedit" alt="edit" kodeid="@item.Id" target="_blank"><i class="glyphicon glyphicon-edit"></i></a></small><br />
-                        }
-                    }
-                    @if (Model.lektionsbesvarelser != null && Model.lektionsbesvarelser.Count() > 0) {
-                        foreach (var item in Model.lektionsbesvarelser)
-                        {
                         <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Filnavn</a></small><br />
-                    }
-                    }
-                </div>
-                <br />
+        }
+        <span id="forwardflipfiler" style="width:24px;height:24px;border-radius:20px;border:1px solid #008789;background-color:#008789;position:absolute;top:35px;left:310px;z-index:900;cursor:pointer;"><i class="fa fa-caret-down" style="margin-left:7px;margin-top:4px;color:#F0F0F0;"></i></span>
+                @:</div>
+                @:<div id="back" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;">
+                @:<h3>Lektionsfiler fortsat</h3>
+                    foreach (var item in Model.lektionsfiler.Skip(5))
+                    {
+                        <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link" ></i>&nbsp;@item.Filnavn</a></small><br />
+        }
+        <div id="backflipfiler" style="width:24px;height:24px;border-radius:20px;border:1px solid #008789;background-color:#008789;position:absolute;top:35px;left:310px;z-index:900;cursor:pointer;"><i class="fa fa-caret-up" style="margin-left:7px;margin-top:2px;color:#F0F0F0;"></i></div>
+                @:</div>
+        @:</div>
+    }
+    }
+    else
+    {
+        @:<div class="activeLektion" id="Opgaver" style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
+        @:<h3>Lektionsfiler</h3>
+        @:</div>
+        }
+    
+<br />
+</div>
+            <div class="col-lg-4">
+    @if (Model.lektionsbesvarelser != null)
+    {
+    if (Model.lektionsbesvarelser.Count() <= 7)
+    {
+        @:<div class="activeLektion" id="Opgaver" style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
+
+
+                @:<h3>Besvarelser</h3>
+                            foreach (var item in Model.lektionsbesvarelser)
+        {
+            <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Filnavn</a></small><br />
+        }
+
+        @:</div>
+                                        }
+    else
+    {
+        @:<div class="activeLektion" id="Besvarelser" style="min-height:200px;">
+                @:<div id="front" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;">
+                    @:<h3>Besvarelser</h3>
+                  foreach (var item in Model.lektionsbesvarelser.Take(5))
+                    {
+            <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Filnavn</a></small><br />
+        }
+        <div id="forwardflipbesvarelser" style="width:24px;height:24px;border-radius:20px;border:1px solid #008789;background-color:#008789;position:absolute;top:35px;left:310px;z-index:900;cursor:pointer;"><i class="fa fa-caret-down" style="margin-left:7px;margin-top:4px;color:#F0F0F0;"></i></div>
+        @:</div>
+                @:<div id="back" style="background-color:#F0F0F0;padding:10px 20px 10px 20px;">
+                    @:<h3>Lektionsfiler fortsat</h3>
+                    foreach (var item in Model.lektionsfiler.Skip(5))
+                    {
+            <small><a href="@item.Url" target="_blank"><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Filnavn</a></small><br />
+        }
+        <div id="backflipbesvarelser" style="width:24px;height:24px;border-radius:20px;border:1px solid #008789;background-color:#008789;position:absolute;top:35px;left:310px;z-index:900;cursor:pointer;"><i class="fa fa-caret-up" style="margin-left:7px;margin-top:2px;color:#F0F0F0;"></i></div>
+        @:</div>
+                @:</div>
+    }
+    }
+    else
+    {
+        @:<div class="activeLektion" id="Opgaver" style="padding:10px 20px 10px 20px;min-height:200px;background-color:#F0F0F0;">
+        @:<h3>Besvarelser</h3>
+        @:</div>
+
+    }
+<br />
             </div>
         </div>
         
@@ -135,4 +198,7 @@
 <!---CRUD kodebesvarelser-->
 @Html.Partial("Modal/_CrudKodebesvarelser")
 
+
+@Html.Partial("JavaScript/_tagitCode")
+@Html.Partial("JavaScript/_validation")
 @Html.Partial("JavaScript/_LektionJS")

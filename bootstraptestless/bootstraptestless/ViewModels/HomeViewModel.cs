@@ -19,10 +19,12 @@ namespace bootstraptestless.ViewModels
         public ICollection<Lektionsfiler> lektionsfiler { get; set; }
         public ICollection<Lektionsbesvarelser> lektionsbesvarelser { get; set; }
         public ICollection<Kode> kodebesvarelser { get; set; }
+        public ICollection<Tag> lektiontags { get; set; }
 
         public Lektion opretLektion { get; set; }
         public Lektionsfiler opretLektionsfil { get; set; }
         public Lektionsbesvarelser opretLektionsbesvarelse { get; set; }
         public Kode opretKodebesvarelse { get; set; }
+        public Tag opretTag { get; set; }
     }
 }

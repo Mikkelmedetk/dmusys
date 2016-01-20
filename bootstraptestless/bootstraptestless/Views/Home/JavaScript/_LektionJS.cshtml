@@ -1,4 +1,46 @@
-﻿<script type="text/javascript">
+﻿<script>
+    $(document).ready(function () {
+    Dropzone.options.dropzoneForm = {
+        maxFilesize: 80,
+        parallelUploads: 6,
+
+        init: function () {
+
+            myDropzone = this; // closure
+
+
+            this.on("complete", function (data) {
+
+                var res = JSON.parse(data.xhr.responseText);
+            });
+
+            this.on("processing", function () {
+                this.options.autoProcessQueue = true;
+            });
+        }
+    };
+
+    Dropzone.options.dropzoneSecond = {
+        maxFilesize: 80,
+        parallelUploads: 6,
+
+        init: function () {
+            myDropzone = this; // closure
+
+
+            this.on("complete", function (data) {
+
+                var res = JSON.parse(data.xhr.responseText);
+            });
+
+            this.on("processing", function () {
+                this.options.autoProcessQueue = true;
+            });
+        }
+    };
+});
+</script>
+<script type="text/javascript">
 
             $(function () {
                 $('#datepicker1').datetimepicker({
@@ -8,7 +50,40 @@
                     locale: 'da'
                 });
             });
+
+
+
             $(document).ready(function () {
+
+                $('#Opgaver').flip({
+                    trigger: 'manual',
+                    axis: 'x'
+                });
+
+                $('#Besvarelser').flip({
+                    trigger: 'manual',
+                    axis: 'x'
+                });
+
+                $("#forwardflipfiler").click(function () {
+                    $("#Opgaver").flip(true);
+
+                });
+
+                $("#backflipfiler").click(function () {
+                    $("#Opgaver").flip(false);
+
+                });
+
+                $("#forwardflipbesvarelser").click(function () {
+                    $("#Besvarelser").flip(true);
+
+                });
+
+                $("#backflipbesvarelser").click(function () {
+                    $("#Besvarelser").flip(false);
+
+                });
 
                 $(".kodebesvarelse").click(function (e) {
                     e.preventDefault();
@@ -17,7 +92,6 @@
                     var url = "@Request.Url.GetLeftPart(UriPartial.Authority)" + "/KodeView/" + "@Model.valgtLektion.Id" + "/" + $(this).attr("kodeid") + "/false";
 
                     window.open(url, windowName, windowsize);
-
                 });
 
                 $(".kodeedit").click(function (e) {
@@ -56,57 +130,11 @@
                 $.post("@Url.Action("deleteKodebesvarelse", "Home")", { kodeid: itemValue });
                 $(this).parent().remove();
             });
+
+
             });
 
 
 
 
-</script>
-<script>
-    Dropzone.options.dropzoneForm = {
-        autoProcessQueue: false,
-        parallelUploads: 6,
-
-        init: function () {
-
-            var submitButton = document.querySelector("#submit-all")
-            myDropzone = this; // closure
-
-            submitButton.addEventListener("click", function () {
-                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
-            });
-
-            this.on("complete", function (data) {
-
-                var res = JSON.parse(data.xhr.responseText);
-            });
-
-            this.on("processing", function () {
-                this.options.autoProcessQueue = true;
-            });
-        }
-    };
-
-    Dropzone.options.dropzoneSecond = {
-        autoProcessQueue: false,
-        parallelUploads: 6,
-
-        init: function () {
-            var submitButton = document.querySelector("#submit-all")
-            myDropzone = this; // closure
-
-            submitButton.addEventListener("click", function () {
-                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
-            });
-
-            this.on("complete", function (data) {
-
-                var res = JSON.parse(data.xhr.responseText);
-            });
-
-            this.on("processing", function () {
-                this.options.autoProcessQueue = true;
-            });
-        }
-    };
 </script>

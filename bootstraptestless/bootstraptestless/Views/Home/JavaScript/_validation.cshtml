@@ -1,0 +1,26 @@
+﻿<script>
+    $(document).ready(function () {
+        $('#opretLektionForm').formValidation({
+            framework: 'bootstrap',
+            icon: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                opretLektionsbeskrivelse: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Lektionbeskrivelse skal være udfyldt'
+                        },
+                        stringLength: {
+                            min: 4,
+                            max: 120,
+                            message: 'Lektionbeskrivelse skal være imellem 4-120 tegn'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>

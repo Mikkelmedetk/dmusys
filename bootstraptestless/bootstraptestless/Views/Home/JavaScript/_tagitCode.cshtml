@@ -1,0 +1,127 @@
+﻿<script>
+
+    //Opret lektion
+    $(document).ready(function () {
+        $("#myTags").tagit({
+            beforeTagAdded: function (event, ui) {
+                return isValidString(ui.tagLabel);
+            }
+        });
+
+        function isValidString(inputString) {
+            var regex = /([A-Za-z0-9#])\w+/;
+            return regex.test(inputString);
+        }
+
+
+
+
+        var afholdelsestid = "";
+        var lnummer = "";
+        var lektionsbeskrivelse = "";
+
+
+        $(".opretlektion").click(function () {
+            afholdelsestid = $("#opretLektionafholdelsestid").val();
+            lnummer = $("#opretLektionsnummer").val();
+            lektionsbeskrivelse = $("#opretLektionsbeskrivelse").val();
+            tags = $("#myTags").tagit("assignedTags");
+
+
+
+
+            console.log(JSON.stringify(tags));
+
+            var fagnavn = $("#fagnavn").val();
+            var semesterid = $("#semesterid").val();
+
+
+            var HomeViewModel = {
+                opretLektion: {
+                    Lektionafholdelsestid: afholdelsestid,
+                    Lektionnummer: lnummer,
+                    Lektionsbeskrivelse: lektionsbeskrivelse
+                },
+                lektiontags: []
+            };
+
+            for (var i in tags) {
+                var item = tags[i];
+                HomeViewModel.lektiontags.push({
+                    "tagName" : item
+                })
+            }
+
+
+            if(lektionsbeskrivelse.length >= 4 && lektionsbeskrivelse.length <= 120) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("opretLektion", "Home")/?fagnavn=" + fagnavn + "&semesterid=" + semesterid,
+                    contentType: "application/json; charset=utf-8",
+                    data:  JSON.stringify(HomeViewModel),
+                    dataType: "json",
+                    traditional: true,
+                    success: function (response) {
+                        window.location.href = response;
+                    }
+                });
+                $('#myModal').modal('hide')
+            }
+        });
+
+
+    });
+
+    $(document).ready(function () {
+        $("#redigermyTags").tagit({
+            beforeTagAdded: function (event, ui) {
+                return isValidString(ui.tagLabel);
+            },
+            afterTagAdded: function (event, ui) {
+                if(!ui.duringInitialization) {
+
+
+                    var HomeViewModel = {
+                        opretTag: {
+                            tagName: ui.tagLabel
+                        }
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("connectTagToLektion", "Home")/?valgtLektion=" + @Model.valgtLektion.Id,
+                        contentType: "application/json; charset=utf-8",
+                        data:  JSON.stringify(HomeViewModel),
+                        dataType: "json",
+                        traditional: true,
+                        success: function (response) {
+                        }
+                    });
+                }
+            },
+            beforeTagRemoved: function (event, ui) { 
+                var HomeViewModel = {
+                    opretTag: {
+                        tagName: ui.tagLabel
+                    }
+                }
+
+                $.ajax({
+                 type: "POST",
+                url: "@Url.Action("removeTagFromLektion", "Home")/?valgtLektion=" + @Model.valgtLektion.Id,
+                contentType: "application/json; charset=utf-8",
+                data:  JSON.stringify(HomeViewModel),
+                dataType: "json",
+                traditional: true,
+                success: function (response) {
+                }
+            });
+            }
+        });
+
+        function isValidString(inputString) {
+            var regex = /([A-Za-z0-9#])\w+/;
+            return regex.test(inputString);
+        }
+    });
+</script>

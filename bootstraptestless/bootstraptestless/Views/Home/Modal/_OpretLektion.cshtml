@@ -1,4 +1,8 @@
 ﻿@model bootstraptestless.ViewModels.HomeViewModel
+@{
+    var antalLektioner = Model.valgtSemester.Lektioner.Count() + 1;
+}
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-md" style="z-index:1051;" role="document">
         <div class="modal-content">
@@ -7,53 +11,59 @@
 
             </div>
 
-            @using (Html.BeginForm("opretLektion", "Home", FormMethod.Post))
-            {
                 <div class="modal-body">
                     <h2>Opret lektion</h2><br />
                     <div class="container">
-                        @Html.AntiForgeryToken()
-                        @Html.ValidationSummary()
-                        @Html.Hidden("fagnavn", Model.valgtFag.friendlyFagNavn)
-                        @Html.Hidden("semesterid", Model.valgtSemester.Id)
+                        <form id="opretLektionForm">
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("fagnavn", Model.valgtFag.friendlyFagNavn)
+                            @Html.Hidden("semesterid", Model.valgtSemester.Id)
 
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.opretLektion.Lektionafholdelsestid, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div style="width:41.5%;">
-                                <div class="input-group date" id="datepicker1">
-                                    <input type="text" class="form-control" id="opretLektion.Lektionafholdelsestid" name="opretLektion.Lektionafholdelsestid" value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm")" aria-describedby="sizing-addon1">
-                                    <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <div class="form-group">
+                                Lektionafholdelsestid:
+                                <div style="width:280px;">
+                                    <div class="input-group date" id="datepicker1">
+                                        <input type="text" class="form-control" id="opretLektionafholdelsestid" name="opretLektionafholdelsestid" value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm")" aria-describedby="sizing-addon1">
+                                        <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
                                 </div>
-                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionafholdelsestid, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.opretLektion.Lektionnummer, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div>
-                                @Html.EditorFor(model => model.opretLektion.Lektionnummer, new { htmlAttributes = new { @class = "form-control", @Value = Model.valgtSemester.Lektioner.Count + 1, @Type = "text", @readonly = "true" } })
-                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionnummer, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                Lektionsnummer:
+                                <div>
+                                    <input type="text" class="form-control" id="opretLektionsnummer" value="@antalLektioner" readonly="true" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.opretLektion.Lektionsbeskrivelse, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div>
-                                @Html.TextAreaFor(model => model.opretLektion.Lektionsbeskrivelse, new { @class = "form-control", cols = "100", rows = "5" })
-                                @Html.ValidationMessageFor(model => model.opretLektion.Lektionsbeskrivelse, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                Lektionbeskrivelse
+                                <div>
+                                    <textarea id="opretLektionsbeskrivelse" name="opretLektionsbeskrivelse" cols="100" rows="5" class="form-control"></textarea>
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="form-group">
+                                Tags
+                                <div>
+                                    <ul id="myTags">
+                                        <li></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
 
                     </div>
 
                 </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="this.form.submit();">Opret Lektion</button>
+                        <button type="button" class="btn btn-primary opretlektion">Opret Lektion</button>
                     </div>
-            }
         </div>
     </div>
 </div>
+
+<script>
+    
+</script>
