@@ -2,11 +2,32 @@
 
     //Opret lektion
     $(document).ready(function () {
+
         $("#myTags").tagit({
+            autocomplete: {
+                appendTo: 'opretLektionForm',
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("getAllTags", "Home")",
+                        dataType: 'json',
+                        data: request,
+                        success: function (data) {
+                            response(data.map(function (value) {
+                                return {
+                                    'label': value.tagName,
+                                    'value': value.id
+                                };
+                            }));
+                        }
+                    });
+                }
+            },
             beforeTagAdded: function (event, ui) {
                 return isValidString(ui.tagLabel);
             }
         });
+
+
 
         function isValidString(inputString) {
             var regex = /([A-Za-z0-9#])\w+/;
@@ -27,10 +48,6 @@
             lektionsbeskrivelse = $("#opretLektionsbeskrivelse").val();
             tags = $("#myTags").tagit("assignedTags");
 
-
-
-
-            console.log(JSON.stringify(tags));
 
             var fagnavn = $("#fagnavn").val();
             var semesterid = $("#semesterid").val();
@@ -74,6 +91,23 @@
 
     $(document).ready(function () {
         $("#redigermyTags").tagit({
+            autocomplete: {
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("getAllTags", "Home")",
+                        dataType: 'json',
+                    data: request,
+                    success: function (data) {
+                        response(data.map(function (value) {
+                            return {
+                                'label': value.tagName,
+                                'value': value.id
+                            };
+                        }));
+                    }
+                });
+    }
+    },
             beforeTagAdded: function (event, ui) {
                 return isValidString(ui.tagLabel);
             },
@@ -99,7 +133,7 @@
                     });
                 }
             },
-            beforeTagRemoved: function (event, ui) { 
+            beforeTagRemoved: function (event, ui) {
                 var HomeViewModel = {
                     opretTag: {
                         tagName: ui.tagLabel

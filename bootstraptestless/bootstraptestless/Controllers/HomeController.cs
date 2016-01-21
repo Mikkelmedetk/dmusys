@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using bootstraptestless.Helpers;
 using System.IO;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace bootstraptestless.Controllers
 {
@@ -452,13 +453,28 @@ namespace bootstraptestless.Controllers
             lektion.Lektiontags.Remove(tag);
             _context.SaveChanges();
 
-            if(tag.Lektioner.Count() == 0)
+            if(tag != null)
+            {
+
+            if(tag.Lektioner?.Count() == 0)
             {
                 _context._Tags.Remove(tag);
                 _context.SaveChanges();
             }
+            }
 
             return Json(HttpStatusCode.OK);
+        }
+
+        [HttpGet]
+        [Route("getAllTags")]
+        public ActionResult getAllTags(string term)
+        {
+
+                var tags = _context._Tags.Where(t => t.tagName.Contains(term)).Select(t => new { t.Id, t.tagName });
+                return Json(tags, JsonRequestBehavior.AllowGet);
+            
+            
         }
 
 

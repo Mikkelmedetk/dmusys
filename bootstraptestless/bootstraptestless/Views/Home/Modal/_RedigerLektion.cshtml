@@ -7,7 +7,7 @@
 
             </div>
 
-            @using (Html.BeginForm("redigerLektion", "Home", FormMethod.Post))
+            @using (Html.BeginForm("redigerLektion", "Home", FormMethod.Post, new { id="redigerLektionForm" }))
             {
                 <div class="modal-body">
                     <h2>Rediger Lektion #@Model.valgtLektion.Lektionnummer </h2><br />
@@ -42,7 +42,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.opretLektion.Lektionsbeskrivelse, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div>
-                                @Html.TextAreaFor(model => model.opretLektion.Lektionsbeskrivelse, new { @class = "form-control", @id = "redigerTextArea", placeholder = @Model.valgtLektion.Lektionsbeskrivelse, cols = "100", rows = "5" })
+                                <textarea class="form-control" cols="100" id="redigerTextArea" name="opretLektion.Lektionsbeskrivelse" rows="5">@Model.valgtLektion.Lektionsbeskrivelse</textarea>
                                 @Html.ValidationMessageFor(model => model.opretLektion.Lektionsbeskrivelse, "", new { @class = "text-danger" })
                             </div>
                         </div>
